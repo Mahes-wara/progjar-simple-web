@@ -16,4 +16,5 @@ Develop a simple web browser that can:
   6. show respective HTTP error messages
   7. open a web page that is protected by HTTP Basic Authentication
   8. can access a web page that is protected behind a login page
+
 You may use Java or any other programming language, but you are NOT ALLOWED to use any HTTP helper library. You need to use the raw socket library provided by the programming language
