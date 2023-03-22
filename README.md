@@ -6,6 +6,7 @@ Nama | NRP
 Maheswara Danendra Satriananda | 5025201060
 Arya Widia Putra | 5025201016
 Handitanto Herprasetyo | 5025201077
+Ezekiel Mashal Wicaksono | 5025201140
 
 Develop a simple web browser that can:
   1. open a web page given a URI and shows the text
