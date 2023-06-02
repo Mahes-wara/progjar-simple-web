@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -28,7 +30,7 @@ public class SimpleWebUI extends JFrame implements ActionListener {
 	String host;
 	static int port = 80;
 	String requestedFile;
-	private HTMLMessage msg;
+	private HTTPMessage msg;
 
 	SimpleWebUI() {
         super("Swing HTML Browser");
@@ -41,11 +43,21 @@ public class SimpleWebUI extends JFrame implements ActionListener {
         add(new JScrollPane(pane));
         setSize(new Dimension(400, 400));
     }
-
 	private void setAddressBarText(String url) {
 		addressBar.setText(url);
 	}
 
+	private static String useRegex(final String input, final String regex) {
+		// Compile regular expression
+		final Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		// Match regex against input
+		final Matcher matcher = pattern.matcher(input);
+		// Use results...
+		if (matcher.find()) {
+			return matcher.group();
+		}
+		return null;
+	}
 	// Adapt <a> element to look like a link
 	private JLabel changeToLink(LinkObject link) {
 		link.setForeground(Color.BLUE.darker());
@@ -80,10 +92,26 @@ public class SimpleWebUI extends JFrame implements ActionListener {
 			// host = ;
 			//url 127.0.0.1/progjar-browser/simple-test.php
 			pane.removeAll();
+			String awal = "";
+			if(url.contains("http://")) {
+				awal = "http://";
+				url = useRegex(url, "(?<=http://).*");
+				System.out.println("Without http " + url);
+			}
+			if(url.contains("https://")) {
+				awal = "https://";
+				url = useRegex(url, "(?<=https://).*");
+				System.out.println("Without https " + url);
+			}
 			String[] tokens = url.split("/", 2);
-			requestedFile = tokens[1];
+			if(tokens.length == 2) {
+				requestedFile = tokens[1];				
+			} else {
+				requestedFile = "";
+			}
 			String host = tokens[0];
-			this.msg = new HTMLMessage(host, requestedFile, 80);
+			System.out.println("Host" + host);
+			this.msg = new HTTPMessage(host, requestedFile, 80);
 			//pane.setText(msg.getContentString());
 			int size = msg.getContent().size();
 			pane.setSize(100, size*50);

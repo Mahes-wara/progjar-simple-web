@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 
 
-public class HTMLMessage {
+public class HTTPMessage {
 	private int statusCode;
 	private String statusMessage;
 	private Queue<JLabel> content;
@@ -44,7 +44,7 @@ public class HTMLMessage {
 		return this.useRegex(input, "(?<=>).*(?=</a>)");
 	}
 	
-	public HTMLMessage(String host,
+	public HTTPMessage(String host,
 			String requestedFile, int port) {
 		super();
 		this.statusCode = 200;
@@ -55,6 +55,17 @@ public class HTMLMessage {
 		this.port = port;
 		
 		String currentFolder = "";
+		String awal;
+		if(requestedFile.contains("http://")) {
+			awal = "http://";
+			requestedFile = useRegex(requestedFile, "(?<=http://).*");
+			System.out.println(requestedFile);
+		}
+		if(requestedFile.contains("https://")) {
+			awal = "https://";
+			requestedFile = useRegex(requestedFile, "(?<=https://).*");
+			System.out.println(requestedFile);
+		}
 		String[] tokens = requestedFile.split("/");
         int x = tokens.length;
         for (String a : tokens) {
@@ -84,6 +95,7 @@ public class HTMLMessage {
 				boolean isMsgBody = false;
 				this.content = new LinkedList<>();
 				while ((line = in.readLine()) != null) {
+					System.out.println(line);
 					if (isMsgBody) {
 						body.append(line);
 						body.append("\r\n");
